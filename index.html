@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HAB flight -- 2016.01.24</title>
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<meta name="viewport" content="initial-scale=1.0">
+		<meta charset="utf-8">
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJUYUMczacifKJ4Wc0WI2Gfcgp2BZrskg&v=3.exp"></script>
+		<script src="lib/jquery.min.js"></script>
+		<script src="lib/gl-matrix-min.js"></script>
+		<script src="src/shader.js"></script>
+		<script src="src/renderer.js"></script>
+		<script src="src/globject.js"></script>
+		<script src="src/quatview.js"></script>
+		<script src="src/map.js"></script>
+		<script src="src/main.js"></script>
+		<script src="src/sounding.js"></script>
+		<script>$(function(){main();});</script>
+	</head>
+
+	<body>
+		<div id="container">
+			<div id="map"></div>
+  			<canvas id="glCanvas"></canvas>
+			<div id="orientation">Orientation</div>
+  			<div id="infobox">Loading data...</div>
+			<form id="controls">
+				<div><span id="timestart">Start time</span><span id="timeend">End time</span></div>
+				<input id="timeline" type="range" oninput="update();" onchange="display();"/>
+				<div><span id="timecurrent">Current time</span>
+				<!-- <button type="button" id="forward" onclick="step();"><</button>
+				<button type="button" id="backward" onclick="step();">></button>
+				<button type="button" id="play" onclick="play();">Play</button>
+				Playback speed:
+				<button type="button" id="speedDown" onclick="speedDown();">-</button>
+				<button type="button" id="speedUp" onclick="speedUp();">+</button> -->
+			</form>
+			<span id="coords">lat, lng</span>
+		</div>
+	</body>
+</html>
