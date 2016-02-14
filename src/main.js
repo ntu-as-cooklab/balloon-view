@@ -51,9 +51,9 @@ function initUI() {
 }
 
 function update() {
-	if (lora.data[lora.current].millis < timeline.value)
+	if (lora.currentData().millis < timeline.value)
 		while(lora.data[lora.current+1].millis <= timeline.value && lora.current<lora.data.length-2) lora.current++;
-	else if (lora.data[lora.current].millis > timeline.value)
+	else if (lora.currentData().millis > timeline.value)
 		while(lora.data[lora.current-1].millis >= timeline.value && lora.current>1) lora.current--;
 
 	// Update timeline
@@ -61,29 +61,28 @@ function update() {
 	timecurrent.style.left = 1 + (timeline.value - timeline.min)*92/(timeline.max - timeline.min) + "%";
 
 	// Update infobox
-	var info = "<table style='border-spacing: 5px;'>";
-	var omit = ["w", "x", "y", "z", "elevation_angle", "azimuth"];
-	for (var i=0; i<lora.header.length; i++)
-		if (omit.indexOf(lora.header[i])<0) {
-			info += "<tr>"
-				+ "<td>" + lora.display_name[lora.header[i]] + ": " + "</td>"
-				+ "<td>" + lora.data[lora.current][lora.header[i]] + " " + lora.units[lora.header[i]] + "</td>"
-				+ "</tr>";}
-	info += "</table>";
+	var show = ["time", "package_no", "altitude", "temperature", "pressure", "RSSI", "frequency_error"];
+	var info = "";
+	for (var i=0; i<show.length; i++)
+		info += "<tr>"
+			+ "<td>" + lora.display_name[show[i]] + ": " + "</td>"
+			+ "<td>" + lora.currentData()[show[i]] + " " + lora.units[show[i]] + "</td>"
+			+ "</tr>";
 	infobox.innerHTML = info;
 
 	// Update orientation
-	cube.orientation = new Float32Array([lora.data[lora.current].x, lora.data[lora.current].y, lora.data[lora.current].z, lora.data[lora.current].w]);
+	cube.orientation = new Float32Array([lora.currentData().x, lora.currentData().y, lora.currentData().z, lora.currentData().w]);
 	orientation.innerHTML = "Orientation: "
-		+ lora.data[lora.current].w + (lora.data[lora.current].x>0?" +":"")
-		+ lora.data[lora.current].x + (lora.data[lora.current].y>0?"i +":"i ")
-		+ lora.data[lora.current].y + (lora.data[lora.current].z>0?"j +":"j ")
-		+ lora.data[lora.current].z + "k"
-		+ "</br>Elevation angle: " + lora.data[lora.current].elevation_angle
-		+ "</br>Azimuth: " + lora.data[lora.current].azimuth;
+		+ lora.currentData().w + (lora.currentData().x>0?" +":"")
+		+ lora.currentData().x + (lora.currentData().y>0?"i +":"i ")
+		+ lora.currentData().y + (lora.currentData().z>0?"j +":"j ")
+		+ lora.currentData().z + "k"
+		+ "</br>Elevation angle: " + lora.currentData().elevation_angle
+		+ "</br>Azimuth: " + lora.currentData().azimuth;
 
 	// Update map
-	balloon.setPosition( new google.maps.LatLng(lora.data[lora.current].latitude, lora.data[lora.current].longitude) );
+	balloon.setPosition(new google.maps.LatLng(lora.currentData().latitude, lora.currentData().longitude));
+	infowindow.setContent(lora.currentData().latitude + ", " + lora.currentData().longitude);
 };
 
 function play() {}

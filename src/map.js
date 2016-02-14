@@ -1,6 +1,7 @@
 var map;
 var loraLayer;
 var balloon;
+var infowindow;
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -16,7 +17,7 @@ function initMap() {
   		fullscreenControl: false
 	});
 
-	// Register map types
+	/*// Register map types
 	SatelliteMapType = new google.maps.ImageMapType({
 		getTileUrl: function(coord, zoom) {
 			var scale = 1 << zoom;
@@ -30,14 +31,16 @@ function initMap() {
 		name: 'Satellite'
 	});
   	map.mapTypes.set('Satellite', SatelliteMapType);
+	*/
 	map.mapTypes.set('Coordinate', new CoordMapType(new google.maps.Size(256, 256)));
 
-	// To show the latlng under mouse cursor.
+	/*// To show the latlng under mouse cursor.
 	var coordsDiv = document.getElementById('coords');
 	map.controls[google.maps.ControlPosition.TOP_CENTER].push(coordsDiv);
 	map.addListener('mousemove', function(event) {
-		coordsDiv.textContent = event.latLng.lat().toFixed(5) + ', ' + event.latLng.lng().toFixed(5);
+	coordsDiv.textContent = event.latLng.lat().toFixed(5) + ', ' + event.latLng.lng().toFixed(5);
 	});
+	*/
 
 	// Executed after map loaded
 	google.maps.event.addListenerOnce(map, 'idle', function(){mapLoaded();});
@@ -47,6 +50,11 @@ function initMap() {
 		position: {lat: lora.data[1].latitude, lng: lora.data[1].longitude},
 		map: map
 	});
+	// Add info window
+	infowindow = new google.maps.InfoWindow({
+  		content: lora.data[1].latitude + ", " + lora.data[1].longitude
+	});
+	balloon.addListener('click', function() {infowindow.open(map, balloon);});
 
 	// Add lora layer
 	loraLayer = new google.maps.KmlLayer({
@@ -59,9 +67,11 @@ function initMap() {
 
 function mapLoaded()
 {
+	/*
 	var HybridMapType = map.mapTypes.hybrid;
 	map.mapTypes.set('hybrid', HybridMapType);
 	map.setMapTypeId('hybrid');
+	*/
 }
 
 function CoordMapType(tileSize) {

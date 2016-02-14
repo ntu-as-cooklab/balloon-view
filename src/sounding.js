@@ -17,6 +17,7 @@ var Sounding = function(csv_path)
 	this.header = [];
 	this.data = [];
 	this.current = 1;
+	this.currentData = function() { return this.data[this.current]; }
 	var instance = this;
 	this.get = jQuery.get(csv_path, function(source){ parse(instance, source); });
 
@@ -24,7 +25,6 @@ var Sounding = function(csv_path)
 	    var counter = 0;
 	    return function () {return counter += 1;}
 	})();
-
 
 	function parse(instance, source)
 	{
